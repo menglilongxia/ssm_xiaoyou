@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+	<title>校友管理-校友会管理-查看校友会成员</title>
+	<link rel="icon" href="favicon.ico" type="image/ico">
+	<meta name="keywords" content="查看校友会成员">
+	<meta name="author" content="yinqi">
+	<link href="/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/css/materialdesignicons.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="/js/jconfirm/jquery-confirm.min.css">
+	<link href="/css/style.min.css" rel="stylesheet">
+
+</head>
+<body>
+
+
+<div class="row">
+	<div class="col-lg-12">
+
+		<div class="card">
+			<div class="card-header"><h4>捐赠管理- <a href="/mon/getAllMoney">项目筹款管理</a> -查看捐赠人员</h4></div>
+			<div class="card-toolbar clearfix">
+				<div class="toolbar-btn-action">
+					<form action='/mon/getMonStuById' id="form3" method='post' role="form">
+						<input type="hidden" name="page" id="pageNo" th:value="${page}">
+						<input type="hidden" name="monId" th:value="${monId}">
+					</form>
+					<a class="btn btn-danger" href="javascript:delCus()" id="delCus"><i class="mdi mdi-window-close"></i> 删除</a>
+				</div>
+			</div>
+			<div class="card-body">
+				<form name="form2" id="fm3" action="/stu" method="post">
+					<input type="hidden" name="monId" th:value="${monId}">
+					<div class="table-responsive">
+						<table class="table table-bordered">
+							<thead>
+							<tr>
+								<th>
+									<label class="lyear-checkbox checkbox-primary">
+										<input type="checkbox" id="check-all" ><span></span>
+									</label>
+								</th>
+								<th>序号</th>
+								<th>姓名</th>
+								<th>捐款金额</th>
+								<th>支付方式</th>
+								<th>捐款时间</th>
+								<th>审核状态</th>
+								<th>操作</th>
+							</tr>
+							</thead>
+							<tbody>
+							<tr th:each="monStu : ${monStuPage.getRecords()}">
+
+								<td>
+									<label class="lyear-checkbox checkbox-primary">
+										<input type="checkbox" name="moneyId" th:value="${monStu.moneyId}"><span></span>
+									</label>
+								</td>
+								<td th:text="${monStuStat.count}">1</td>
+								<td th:text="${monStu.tbStu.name}"></td>
+								<td th:text="${monStu.moneyCount}">《倚天屠龙记》</td>
+								<td>
+									<span th:if="${monStu.monType}==0">手动捐款</span>
+									<span th:if="${monStu.monType}==1">在线支付</span>
+								</td>
+								<td th:text="${#temporals.format(monStu.moneyTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+								<td>
+									<span th:if="${monStu.monStatus}==0">未审核</span>
+									<span th:if="${monStu.monStatus}==1">审核通过</span>
+									<span th:if="${monStu.monStatus}==2">审核不通过</span>
+								</td>
+								<td>
+									<div class="btn-group btn-group-sm">
+										<a class="btn btn-info" th:onclick="'javascript:getMonStuMessById('+${monStu.monStatus}+','+${monStu.moneyId}+')'" title="审核" ><i class="mdi mdi-pencil"></i></a>
+										<a class="btn btn-xs btn-danger" th:href="@{'/mon/delMonStuById?moneyId='+${monStu.moneyId}+'&monId='+${monStu.monId}}"  title="删除" data-toggle="tooltip"><i class="mdi mdi-window-close"></i></a>
+									</div>
+								</td>
+							</tr>
+							</tbody>
+						</table>
+					</div>
+				</form>
+				<div class="pagination">
+
+					<div id="myPage"></div>
+					<link rel="stylesheet" type="text/css" href="/js/page/jquery.sPage.css">
+					<script type="text/javascript"
+							src="/js/jquery.min.js"></script>
+					<script type="text/javascript"
+							src="/js/page/jquery.sPage.min.js"></script>
+					<script type="text/javascript" th:inline="javascript">
+                        $("#myPage").sPage({
+
+                            page:[[${page}]],//当前页码，必填
+                            total:[[${monStuPage.getTotal()}]],//数据总条数，必填
+                            pageSize:[[${monStuPage.getSize()}]],//每页显示多少条数据，默认10条
+                            totalTxt:"共"+[[${monStuPage.getTotal()}]]+"条",//数据总条数文字描述，{total}为占位符，默认"共{total}条"
+                            showTotal:true,//是否显示总条数，默认关闭：false
+                            showSkip:true,//是否显示跳页，默认关闭：false
+                            showPN:true,//是否显示上下翻页，默认开启：true
+                            prevPage:"上一页",//上翻页文字描述，默认“上一页”
+                            nextPage:"下一页",//下翻页文字描述，默认“下一页”
+                            backFun:function(page){
+                                //点击分页按钮回调函数，返回当前页码
+                                console.log(page);
+                                $("#pageNo").val(page);
+                                $("#form3").submit();
+                            }
+                        });
+
+                        //回调方法:点击上一页和下一页
+                        function handlePaginationClick(new_page_index, pagination_container) {
+                            $("#pageNo").val(new_page_index + 1);
+                            $("#form3").submit();
+                        }
+
+                        $(function () {
+                            $("#check-all").click(function () {
+                                if(this.checked){
+                                    $("input[name=moneyId]").prop("checked",true);
+                                }else {
+                                    $("input[name=moneyId]").prop("checked",false);
+                                }
+
+                            });
+                            $("#checkrev").click(function () {
+                                $("input[name=moneyId]").each(function () {
+                                    $(this).prop("checked",!$(this).prop("checked"))
+                                });
+                            })
+                        });
+
+                        function delCus() {
+                            $("#fm3").prop("action","/mon/delMonStuById");
+                            var len=$("input[name=moneyId]:checked").length;
+                            if(len>0){
+                                if(confirm("你确定要删除吗?")){
+                                    $("#fm3").submit();
+                                }
+                            }else {
+                                alert("你还没有选中")
+                            }
+                        }
+                        function getMonStuMessById(monStatus,moneyId) {
+                            if(monStatus!=1){
+                                location.href="/mon/getMonStuMessById?moneyId="+moneyId;
+                            }else {
+                                $.confirm({
+                                    title: '捐款审核',
+                                    content: '审核失败，不能重复审核',
+                                    type: 'red',
+                                    buttons: {
+                                        tryAgain: {
+                                            text: '确认',
+                                            btnClass: 'btn-red',
+                                        }
+                                    }
+                                });
+                            }
+                        }
+					</script>
+
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+</div>
+
+
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/perfect-scrollbar.min.js"></script>
+<script type="text/javascript" src="/js/main.min.js"></script>
+<script src="/js/jconfirm/jquery-confirm.min.js"></script>
+</body>
+</html>

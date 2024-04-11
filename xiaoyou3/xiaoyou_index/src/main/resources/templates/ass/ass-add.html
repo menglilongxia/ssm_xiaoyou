@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>校友会-创建校友会</title>
+	<link rel="stylesheet" href="/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/index.css">
+	<!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
+	<link href="/css/materialdesignicons.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="/js/jconfirm/jquery-confirm.min.css">
+	<link href="/css/style.min.css" rel="stylesheet">
+	<script src="/js/jquery.min.js"></script>
+	<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+	<script src="/js/bootstrap.min.js"></script>
+</head>
+<body class="body">
+<div th:insert="~{navigation :: copy}"></div>
+<div class="container">
+	<h2>创建校友会</h2>
+	<hr>
+<div class="row">
+	<div class="col-lg-8">
+				<form action="/ass/addAss" method="post" class="row" id="form1">
+					<div class="form-group col-md-12"></div>
+					<div class="form-group col-md-10">
+						<label for="assName">校友会名称</label>
+						<input type="text" class="form-control" id="assName" name="assName" placeholder="给你要创建的校友会起个名字吧"  required="required"/>
+					</div>
+
+					<div class="form-group col-md-12"></div>
+					<div class="form-group col-md-10">
+						<label for="assDescription">校友会简介</label>
+						<textarea type="text" class="form-control" id="assDescription" name="assDescription"  placeholder="这里是简介" required="required"></textarea>
+					</div>
+
+					<div class="form-group col-md-12"></div>
+					<div class="form-group col-md-10">
+						<label for="assGroup">QQ群</label>
+						<input type="text" class="form-control" id="assGroup" name="assGroup" placeholder="输入QQ群号"  required="required"/>
+					</div>
+
+					<div class="form-group col-md-12"></div>
+					<div class="form-group col-md-10">
+						<label for="assCon">联系方式</label>
+						<input type="text" class="form-control" id="assCon" name="assCon" placeholder="输入你的联系方式"  required="required"/>
+					</div>
+
+
+					<div class="form-group col-md-12">
+						<button type="button" class="btn btn-primary ajax-post" target-form="add-form" onclick="addAss()">确 定</button>
+						<button type="button" class="btn btn-default" onclick="javascript:history.back(-1);return false;">返 回</button>
+					</div>
+				</form>
+
+			</div>
+		</div>
+</div>
+	<script type="text/javascript" src="/js/axios.min.js"></script>
+	<script type="text/javascript" src="/js/jquery.min.js"></script>
+	<script src="/js/jconfirm/jquery-confirm.min.js"></script>
+	<script type="text/javascript">
+
+        function addAss() {
+            axios.post('/ass/addAss',$('#form1').serialize())
+                .then(function (response) {
+                    var data=response.data;
+                    if(data==1){
+                        $.alert({
+                            title: '创建校友会',
+                            content: '创建成功，请等待后台审核',
+                            buttons: {
+                                confirm: {
+                                    text: '确认',
+                                    btnClass: 'btn-primary',
+                                    action: function(){
+                                        location.href="/ass/getAllAss"
+                                    }
+                                },
+                                cancel: {
+                                    text: '取消',
+                                }
+                            }
+                        });
+                    }else if(data==2){
+                        $.alert({
+                            title: '创建校友会',
+                            content: '创建失败，已存在该校友会',
+                            buttons: {
+                                confirm: {
+                                    text: '确认',
+                                    btnClass: 'btn-primary',
+                                },
+                                cancel: {
+                                    text: '取消',
+                                }
+                            }
+                        });
+                    }else {
+                        $.alert({
+                            title: '创建校友会',
+                            content: '创建失败，再次检查信息',
+                            buttons: {
+                                confirm: {
+                                    text: '确认',
+                                    btnClass: 'btn-primary',
+                                },
+                                cancel: {
+                                    text: '取消',
+                                }
+                            }
+                        });
+					}
+                }).catch(function (error) {
+                $.alert({
+                    title: '创建校友会',
+                    content: '创建失败，再次检查信息',
+                    buttons: {
+                        confirm: {
+                            text: '确认',
+                            btnClass: 'btn-primary',
+                        },
+                        cancel: {
+                            text: '取消',
+                        }
+                    }
+                });
+            })
+        }
+
+	</script>
+</body>
+</html>

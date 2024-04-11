@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+	<title>捐赠管理-捐款管理</title>
+	<link rel="icon" href="favicon.ico" type="image/ico">
+	<meta name="keywords" content="审核">
+	<meta name="author" content="yinqi">
+	<link href="/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/css/materialdesignicons.min.css" rel="stylesheet">
+	<link href="/css/style.min.css" rel="stylesheet">
+
+</head>
+<body>
+<div class="row">
+	<div class="col-lg-12">
+		<div class="card">
+			<div class="card-body">
+
+				<form action="/mon/updateMonById" method="post" class="row" >
+					<input type="hidden" name="monId" th:value="${tbMon.monId}">
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-3">
+						<label for="monName">筹款项目名称</label>
+						<input type="text" class="form-control" id="monName" name="monName" th:value="${tbMon.monName}" />
+					</div>
+					<div class="form-group col-md-5"></div>
+					<div class="form-group col-md-12"></div>
+
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-3">
+						<label for="monDesc">筹款项目名称</label>
+						<textarea type="text" class="form-control" id="monDesc" name="monDesc" th:text="${tbMon.monDesc}" ></textarea>
+					</div>
+					<div class="form-group col-md-5"></div>
+					<div class="form-group col-md-12"></div>
+
+
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-3">
+						<label for="monCount">需要金额</label>
+						<input type="text" class="form-control" id="monCount" name="monCount" th:value="${tbMon.monCount}" >
+					</div>
+					<div class="form-group col-md-5"></div>
+					<div class="form-group col-md-12"></div>
+
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-3">
+						<label for="monHad">已筹款金额</label>
+						<input type="text" class="form-control" id="monHad" name="monHad" th:value="${tbMon.monHad}" readonly>
+					</div>
+					<div class="form-group col-md-5"></div>
+					<div class="form-group col-md-12"></div>
+
+
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-3">
+						<input type="hidden" name="monPer" th:value="${tbMon.monPer}">
+						<label for="PerName">发起人</label>
+						<input type="text" class="form-control" id="PerName" name="" th:value="${tbMon.tbStu.name}" />
+					</div>
+					<div class="form-group col-md-5"></div>
+					<div class="form-group col-md-12"></div>
+
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-3">
+						<label for="monTime">时间</label>
+						<input type="text" class="form-control" id="monTime" name="monTime" th:value="${#temporals.format(tbMon.monTime,'yyyy-MM-dd HH:mm:ss')}" readonly/>
+					</div>
+					<div class="form-group col-md-5"></div>
+					<div class="form-group col-md-12"></div>
+
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-3">
+						<label>筹款状态</label>
+						<div class="clearfix">
+							<label class="lyear-radio radio-inline radio-primary">
+								<input type="radio" name="monStatus" value="0" th:checked="${tbMon.monStatus==0}"><span>未开始</span>
+							</label>
+							<label class="lyear-radio radio-inline radio-primary">
+								<input type="radio" name="monStatus" value="1" th:checked="${tbMon.monStatus==1}"><span>正在进行</span>
+							</label>
+							<label class="lyear-radio radio-inline radio-primary">
+								<input type="radio" name="monStatus" value="2" th:checked="${tbMon.monStatus==2}"><span>已结束</span>
+							</label>
+						</div>
+					</div>
+					<div class="form-group col-md-5"></div>
+					<div class="form-group col-md-12"></div>
+
+
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-3">
+
+						<button type="submit" class="btn btn-primary ajax-post" target-form="add-form">确 定</button>
+						<button type="button" class="btn btn-default" onclick="javascript:history.back(-1);return false;">返 回</button>
+					</div>
+				</form>
+
+			</div>
+		</div>
+	</div>
+
+</div>
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/perfect-scrollbar.min.js"></script>
+<script type="text/javascript" src="/js/main.min.js"></script>
+<script type="text/javascript" src="/js/axios.min.js"></script>
+<script type="text/javascript">
+
+
+</script>
+</body>
+</html>

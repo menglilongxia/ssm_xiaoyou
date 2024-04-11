@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lgy.xiaoyou_index.mapper.TbDonMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lgy.tools.entity.TbDon">
+        <id column="don_id" property="donId" />
+        <result column="don_name" property="donName" />
+        <result column="don_desc" property="donDesc" />
+        <result column="don_per" property="donPer" />
+        <result column="don_time" property="donTime" />
+        <result column="don_status" property="donStatus" />
+        <result column="don_opinion" property="donOpinion" />
+
+    </resultMap>
+
+    <resultMap id="PageDon" type="com.lgy.tools.entity.TbDon" extends="BaseResultMap">
+        <association property="tbStu" javaType="com.lgy.tools.entity.TbStu">
+            <result property="userId" column="user_id"/>
+            <result property="name" column="name"/>
+        </association>
+    </resultMap>
+
+    <select id="getAllDon" resultMap="PageDon">
+        SELECT tb_don.*,tb_stu.user_id,tb_stu.`name` FROM tb_don,tb_stu WHERE tb_don.don_per=tb_stu.user_id AND tb_don.don_status=1
+    </select>
+
+    <select id="getDonById" parameterType="Integer" resultMap="PageDon">
+        SELECT tb_don.*,tb_stu.user_id,tb_stu.`name` FROM tb_don,tb_stu WHERE tb_don.don_per=tb_stu.user_id AND tb_don.don_id=#{donId}
+    </select>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        don_id, don_name, don_desc, don_per, don_time
+    </sql>
+
+</mapper>

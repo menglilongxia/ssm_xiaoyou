@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+	<title>校友管理-校友会管理-审核</title>
+	<link rel="icon" href="favicon.ico" type="image/ico">
+	<meta name="keywords" content="审核">
+	<meta name="author" content="yinqi">
+	<link href="/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/css/materialdesignicons.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="/js/jconfirm/jquery-confirm.min.css">
+	<link href="/css/style.min.css" rel="stylesheet">
+
+</head>
+<body>
+<div class="row">
+	<div class="col-lg-12">
+		<div class="card">
+			<div class="card-body">
+
+				<form action="/act/updateActById" method="post" class="row" id="actForm">
+					<input type="hidden" name="acId" th:value="${act.acId}" id="acId">
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-4">
+						<label for="acTitle">活动名称</label>
+						<input type="text" class="form-control" id="acTitle" name="acTitle" th:value="${act.acTitle}" readonly/>
+					</div>
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-12"></div>
+
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-4">
+						<label for="acDesc">具体描述</label>
+						<textarea type="text" class="form-control" id="acDesc" name="acDesc" th:text="${act.acDesc}" readonly></textarea>
+					</div>
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-12"></div>
+
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-4">
+						<input type="hidden" name="acPer" id="acPer" th:value="${act.acPer}">
+						<label for="PerName">活动发起人</label>
+						<input type="text" class="form-control" id="PerName" name="" th:value="${act.tbStu.name}" readonly/>
+					</div>
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-12"></div>
+
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-4">
+						<label for="acCount">报名人数</label>
+						<input type="text" class="form-control" id="acCount" name="acCount" th:value="${act.acCount}" readonly/>
+					</div>
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-12"></div>
+
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-4">
+						<label for="acCreateTime">创建时间</label>
+						<input type="text" class="form-control" id="acCreateTime" name="acCreateTime" th:value="${#temporals.format(act.acCreateTime,'yyyy-MM-dd HH:mm:ss')}" readonly/>
+					</div>
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-12"></div>
+
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-4">
+						<label for="acStartTime">开始时间</label>
+						<input type="text" class="form-control" id="acStartTime" name="acStartTime" th:value="${#temporals.format(act.acStartTime,'yyyy-MM-dd HH:mm')}" readonly/>
+					</div>
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-12"></div>
+
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-4">
+						<label for="acEndTime">结束时间</label>
+						<input type="text" class="form-control" id="acEndTime" name="acEndTime" th:value="${#temporals.format(act.acEndTime,'yyyy-MM-dd HH:mm')}" readonly/>
+					</div>
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-12"></div>
+
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-4">
+						<label>审核状态</label>
+						<div class="clearfix">
+							<label class="lyear-radio radio-inline radio-primary">
+								<input type="radio" name="acStatus" value="0" th:checked="${act.acStatus==0}"><span>未审核</span>
+							</label>
+							<label class="lyear-radio radio-inline radio-primary">
+								<input type="radio" name="acStatus" value="1" th:checked="${act.acStatus==1}"><span>审核通过</span>
+							</label>
+							<label class="lyear-radio radio-inline radio-primary">
+								<input type="radio" name="acStatus" value="2" th:checked="${act.acStatus==2}"><span>审核不通过</span>
+							</label>
+						</div>
+					</div>
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-12"></div>
+
+
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-4">
+						<label for="acOpinion">审核意见</label>
+						<textarea type="text" class="form-control" id="acOpinion" name="acOpinion" th:text="${act.acOpinion}"  required></textarea>
+					</div>
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-12"></div>
+
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-4">
+						<button type="button"  onclick="subAct()" class="btn btn-primary ajax-post" target-form="add-form">确 定</button>
+						<button type="button" class="btn btn-default" onclick="javascript:history.back(-1);return false;">返 回</button>
+					</div>
+				</form>
+
+			</div>
+		</div>
+	</div>
+
+</div>
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/perfect-scrollbar.min.js"></script>
+<script src="/js/bootstrap-notify.min.js"></script>
+<script type="text/javascript" src="/js/lightyear.js"></script>
+<script type="text/javascript" src="/js/main.min.js"></script>
+<script type="text/javascript" src="/js/axios.min.js"></script>
+<script src="/js/jconfirm/jquery-confirm.min.js"></script>
+<script type="text/javascript">
+	function subAct(){
+        var acId=$('#acId').val();
+        var acStatus=$("input[name='acStatus']:checked").val();
+        var acOpinion=$('#acOpinion').val();
+        var acPer=$('#acPer').val();
+        lightyear.loading('show');
+        axios.get('/act/updateActById?acId='+acId+"&acStatus="+acStatus+"&acOpinion="+acOpinion+"&acPer="+acPer).then(function (response) {
+            var data=response.data;
+            console.log(data);
+            if(data==1){
+                $.alert({
+                    title: '活动审核',
+                    content: '审核成功，确认返回主页',
+                    buttons: {
+                        confirm: {
+                            text: '确认',
+                            btnClass: 'btn-primary',
+                            action: function () {
+                                location.href = "/act/getAllAct"
+                            }
+                        }
+                    }
+                });
+			}else {
+                $.confirm({
+                    title: '活动审核',
+                    content: '审核失败，检查审核信息',
+                    type: 'red',
+                    buttons: {
+                        tryAgain: {
+                            text: '确认',
+                            btnClass: 'btn-red',
+
+                        }
+                    }
+                });
+			}
+        })
+
+        setTimeout(function() {
+            lightyear.loading('hide');
+            lightyear.notify('系统审核中，请等待~', 'success', 3000,'mdi mdi-emoticon-happy', 'top', 'center');
+        }, 1e3)
+
+	}
+
+
+</script>
+</body>
+</html>

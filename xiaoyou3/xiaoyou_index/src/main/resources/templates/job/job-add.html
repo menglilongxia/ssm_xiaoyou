@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>招聘信息-发布招聘信息</title>
+	<link rel="stylesheet" href="/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/index.css">
+	<!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
+	<link href="/css/materialdesignicons.min.css" rel="stylesheet">
+
+	<link href="/css/style.min.css" rel="stylesheet">
+</head>
+<body class="body">
+<div th:insert="~{navigation :: copy}"></div>
+<div class="container">
+	<h2>发布就业岗位</h2>
+	<hr>
+	<div class="row">
+		<div class="col-lg-8">
+			<form action="/job/addJob" method="post" class="row" id="form1">
+				<div class="form-group col-md-12"></div>
+				<div class="form-group col-md-10">
+					<label for="jobCompany">公司名称</label>
+					<input type="text" class="form-control" id="jobCompany" name="jobCompany" placeholder="公司名称"  required="required"/>
+				</div>
+
+				<div class="form-group col-md-12"></div>
+				<div class="form-group col-md-10">
+					<label for="jobName">职位名称</label>
+					<input type="text" class="form-control" id="jobName" name="jobName" placeholder="职位名称"  required="required"/>
+				</div>
+
+				<div class="form-group col-md-12"></div>
+				<div class="form-group col-md-10">
+					<label for="jobDesc">职位介绍</label>
+					<textarea type="text" class="form-control" id="jobDesc" name="jobDesc"  placeholder="职位详细说明" required="required"></textarea>
+				</div>
+
+				<div class="form-group col-md-12"></div>
+				<div class="form-group col-md-10">
+					<label for="perCount">招聘人数</label>
+					<input type="text" class="form-control" id="perCount" name="perCount" placeholder="招聘人数"  required="required"/>
+				</div>
+
+				<div class="form-group col-md-12"></div>
+				<div class="form-group col-md-10">
+					<label for="jobAddress">工作地址</label>
+					<input type="text" class="form-control" id="jobAddress" name="jobAddress" placeholder="输入地址"  required="required"/>
+				</div>
+
+				<div class="form-group col-md-12"></div>
+				<div class="form-group col-md-10">
+					<label for="jobEmail">投递地址</label>
+					<input type="text" class="form-control" id="jobEmail" name="jobEmail" placeholder="输入Email"  required="required"/>
+				</div>
+
+
+				<div class="col-md-12">
+					<button type="button" class="btn btn-primary ajax-post" target-form="add-form" onclick="addJob()">发布</button>
+					<button type="button" class="btn btn-default" onclick="javascript:history.back(-1);return false;">返 回</button>
+				</div>
+			</form>
+
+		</div>
+	</div>
+</div>
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<script type="text/javascript" src="/js/axios.min.js"></script>
+
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+
+<script type="text/javascript" src="/js/main.min.js"></script>
+<script type="text/javascript">
+
+    function addJob() {
+        $('#form1').submit();
+    }
+
+
+</script>
+</body>
+</html>

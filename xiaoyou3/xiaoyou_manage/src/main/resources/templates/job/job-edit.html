@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+	<title>行业联谊-内推招聘</title>
+	<link rel="icon" href="favicon.ico" type="image/ico">
+	<meta name="keywords" content="审核">
+	<meta name="author" content="yinqi">
+	<link href="/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/css/materialdesignicons.min.css" rel="stylesheet">
+	<link href="/css/style.min.css" rel="stylesheet">
+
+</head>
+<body>
+<div class="row">
+	<div class="col-lg-12">
+		<div class="card">
+			<div class="card-body">
+
+				<form action="/job/updateJobById" method="post" class="row" >
+					<input type="hidden" name="jobId" th:value="${job.jobId}">
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-3">
+						<label for="jobName">职位名称</label>
+						<input type="text" class="form-control" id="jobName" name="jobName" th:value="${job.jobName}" readonly/>
+					</div>
+					<div class="form-group col-md-5"></div>
+					<div class="form-group col-md-12"></div>
+
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-3">
+						<label for="jobDesc">职位描述</label>
+						<textarea type="text" class="form-control" id="jobDesc" name="jobDesc" th:text="${job.jobDesc}" readonly></textarea>
+					</div>
+					<div class="form-group col-md-5"></div>
+					<div class="form-group col-md-12"></div>
+
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-3">
+						<label for="perCount">招聘人数</label>
+						<input type="text" class="form-control" id="perCount" name="perCount" th:value="${job.perCount}" readonly>
+					</div>
+					<div class="form-group col-md-5"></div>
+					<div class="form-group col-md-12"></div>
+
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-3">
+						<label for="jobEmail">投递地址</label>
+						<input type="text" class="form-control" id="jobEmail" name="jobEmail" th:value="${job.jobEmail}" readonly>
+					</div>
+					<div class="form-group col-md-5"></div>
+					<div class="form-group col-md-12"></div>
+
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-3">
+						<input type="hidden" name="userId" th:value="${job.userId}">
+						<label for="PerName">发布人</label>
+						<input type="text" class="form-control" id="PerName" name="" th:value="${job.tbStu.name}" readonly/>
+					</div>
+					<div class="form-group col-md-5"></div>
+					<div class="form-group col-md-12"></div>
+
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-3">
+						<label for="jobTime">发布时间</label>
+						<input type="text" class="form-control" id="jobTime" name="acCreateTime" th:value="${#temporals.format(job.jobTime,'yyyy-MM-dd HH:mm:ss')}" readonly/>
+					</div>
+					<div class="form-group col-md-5"></div>
+					<div class="form-group col-md-12"></div>
+
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-3">
+						<label>审核状态</label>
+						<div class="clearfix">
+							<label class="lyear-radio radio-inline radio-primary">
+								<input type="radio" name="checkStatus" value="0" th:checked="${job.checkStatus==0}"><span>未审核</span>
+							</label>
+							<label class="lyear-radio radio-inline radio-primary">
+								<input type="radio" name="checkStatus" value="1" th:checked="${job.checkStatus==1}"><span>审核通过</span>
+							</label>
+							<label class="lyear-radio radio-inline radio-primary">
+								<input type="radio" name="checkStatus" value="2" th:checked="${job.checkStatus==2}"><span>审核不通过</span>
+							</label>
+						</div>
+					</div>
+					<div class="form-group col-md-5"></div>
+					<div class="form-group col-md-12"></div>
+
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-3">
+						<label for="checkOpinion">审核意见</label>
+						<textarea type="text" class="form-control" id="checkOpinion" name="checkOpinion" th:text="${job.checkOpinion}"  required></textarea>
+					</div>
+					<div class="form-group col-md-5"></div>
+					<div class="form-group col-md-12"></div>
+
+
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-3">
+
+						<button type="submit" class="btn btn-primary ajax-post" target-form="add-form">确 定</button>
+						<button type="button" class="btn btn-default" onclick="javascript:history.back(-1);return false;">返 回</button>
+					</div>
+				</form>
+
+			</div>
+		</div>
+	</div>
+
+</div>
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/perfect-scrollbar.min.js"></script>
+<script type="text/javascript" src="/js/main.min.js"></script>
+<script type="text/javascript" src="/js/axios.min.js"></script>
+<script type="text/javascript">
+
+
+</script>
+</body>
+</html>

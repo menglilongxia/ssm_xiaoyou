@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en"><!--引入thymeleaf-->
+<meta name="referrer" content="no-referrer"/>
+<!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title th:text="${tbQuestion.title}"></title>
+	<link rel="stylesheet" href="/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/index.css">
+	<!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
+	<link href="/css/materialdesignicons.min.css" rel="stylesheet">
+	<link href="/css/style.min.css" rel="stylesheet">
+	<script src="/js/jquery.min.js"></script>
+	<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+	<script src="/js/bootstrap.min.js"></script>
+	<script src="/js/community.js" type="application/javascript"></script>
+	<script src="/js/moment.js" type="application/javascript"></script>
+    <!--editor相关-->
+    <script src="/js/wangEditor.min.js"></script>
+</head>
+<body class="body">
+<!--导入导航栏-->
+<div th:insert="~{navigation :: copy}"></div>
+<!--问题的详情和回复界面-->
+<div class="container-fluid main">
+    <div class="row">
+        <div class="col-lg-9 col-md-12 col-sm-12 col-ss-12">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-ss-12">
+                <h2><span th:text="${tbQuestion.title}"></span></h2>
+                <!--正文-->
+                <span class="common-list">
+                    作者： <span th:text="${tbQuestion.tbStu.name}"></span> |
+                    发布时间： <span th:text="${#temporals.format(tbQuestion.createtime,'yyyy-MM-dd HH:mm:ss')}"></span> |
+                    阅读数： <span th:text="${tbQuestion.viewCount}"></span>
+            </span>
+                <hr>
+                <!--内容-->
+                <div class="col-lg-12 col-md-12 col-sm-12 col-ss-12"
+					 id="question-view" th:utext="${tbQuestion.description}">
+
+				</div>
+                <script type="text/javascript">
+                    /*$(function() {
+                        var q=$("#question-editor");
+                        q.innerHTML=[[${tbQuestion.description}]];
+                    });*/
+                </script>
+
+                <hr class="col-lg-12 col-md-12 col-sm-12 col-ss-12">
+                <!--标签-->
+                <div class="col-lg-12 col-md-12 col-sm-12 col-ss-12">
+                    <span class="label label-info" th:each="tag : ${tbQuestion.tag.split(',')}" style="margin-right: 10px;">
+                        <span class="label label-info" th:text="${tag}"></span>
+                    </span>
+
+                </div>
+                <hr class="col-lg-12 col-md-12 col-sm-12 col-ss-12">
+                <!--编辑-->
+                <a th:href="@{'/publish/'+${tbQuestion.id}}"
+                   th:if="${session.tbStu!=null && session.tbStu.userId==tbQuestion.createid}">
+                <span class="mdi mdi-tooltip-edit" aria-hidden="true">
+                    编辑
+                </span>
+                </a>
+            </div>
+            <!--回复内容-->
+            <hr class="col-lg-12 col-md-12 col-sm-12 col-ss-12">
+            <h3>
+                <span th:text="${tbQuestion.commentCount}"></span>个回复
+            </h3>
+            <hr class="col-lg-12 col-md-12 col-sm-12 col-ss-12" style="margin-top: 0;">
+            <!--一级评论-->
+            <div class="col-lg-12 col-md-12 col-sm-12 col-ss-12" th:each="comment:${tbComments}" id="comment_content">
+                <div class="media">
+                    <div class="media-left">
+                        <img class="media-object img-rounded picset"
+                             th:src="${comment.tbStu.stuImg}">
+                    </div>
+                    <div class="media-body">
+                        <h4 class="media-heading">
+                            <span th:text="${comment.tbStu.name}"></span>
+                            <div style="font-size: 15px; margin-top:5px;" th:text="${comment.content}">
+                            </div>
+                            <!--点赞评论时间-->
+                            <div class="question-menu">
+                                <span class="mdi mdi-message-plus" aria-hidden="true"></span>
+                                <!--回复按钮-->
+                                <span class="mdi mdi-message-text" aria-hidden="true"
+                                      th:data-id="${comment.id}" th:data-check="1" onclick="secondcomment(this)" th:text="${comment.commentcount}"></span>
+                                <span th:text="${#temporals.format(tbQuestion.createtime,'yyyy-MM-dd HH:mm:ss')}"></span>
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-ss-12 collapse sub-comment"
+                                 th:id="${'comment-'+comment.id}">
+                                <!--二级评论插入到这里-->
+                                <!--二级评论输入框-->
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-ss-12" style="margin-top: 10px;">
+                                    <input type="text" class="form-control" placeholder="评论一下....." th:id="${'input-'+comment.id}">
+                                    <button type="button" class="btn btn-success" style="float: right;margin: 10px;"
+                                            onclick="replypost(this)" th:data-id="${comment.id}">
+                                        提交
+                                    </button>
+                                </div>
+                            </div>
+                        </h4>
+                    </div>
+                </div>
+            </div>
+
+            <!--回复框-->
+            <div class="col-lg-12 col-md-12 col-sm-12 col-ss-12" id="comment_section">
+                <div class="media" style="margin-bottom: 20px">
+                    <div class="media-left">
+                        <img class="media-object img-rounded picset"
+                             th:src="${session.tbStu.stuImg}">
+                    </div>
+                    <div class="media-body" style="padding-top:10px;">
+                        <h4 class="media-heading">
+                            <span th:text="${tbQuestion.tbStu.name}"/>
+                        </h4>
+                    </div>
+                </div>
+                <input type="hidden" id="question_id" th:value="${tbQuestion.id}">
+                <textarea class="form-control" rows="6" style="margin-top:10px; margin-bottom: 10px;"
+                          id="content"></textarea>
+                <button type="button" class="btn btn-success" style="float: right;margin: 10px;"
+                        onclick="post()">提交
+                </button>
+            </div>
+        </div>
+        <!--右侧信息框-->
+        <div class="col-lg-3 col-md-12 col-sm-12 col-ss-12">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-ss-12">
+                <h4>问题发起人</h4>
+                <div class="media">
+                    <div class="media-left">
+                        <img class="media-object img-circle picset"
+                             th:src="${session.tbStu.stuImg}">
+                    </div>
+                    <div class="media-body">
+                        <h4 class="media-heading">
+                            <span th:text="${tbQuestion.tbStu.name}"/>
+                        </h4>
+                    </div>
+                </div>
+            </div>
+            <hr class="col-lg-12 col-md-12 col-sm-12 col-ss-12">
+            <!--相关问题-->
+            <div class="col-lg-12 col-md-12 col-sm-12 col-ss-12">
+                <h4>相关问题</h4>
+                <ul class="list-group">
+                    <li class="list-group-item"  th:each="relative:${relativeQuestion}">
+                        <a th:href="@{'/question/'+${relative.id}}" th:text="${relative.title}"></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

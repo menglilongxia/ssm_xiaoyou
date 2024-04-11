@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lgy.xiaoyou_index.mapper.TbNewsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lgy.tools.entity.TbNews">
+        <id column="news_id" property="newsId" />
+        <result column="news_tittle" property="newsTittle" />
+        <result column="news_content" property="newsContent" />
+        <result column="news_user" property="newsUser" />
+        <result column="news_time" property="newsTime" />
+    </resultMap>
+
+    <resultMap id="NewsPage" type="com.lgy.tools.entity.TbNews" extends="BaseResultMap">
+        <association property="tbStu" javaType="com.lgy.tools.entity.TbStu">
+            <result property="userId" column="user_id"/>
+            <result property="name" column="name"/>
+        </association>
+    </resultMap>
+
+    <select id="getAllNews" resultMap="NewsPage">
+        SELECT tb_news.*,tb_stu.`name`,tb_stu.user_id FROM `tb_news`,`tb_stu`
+        <where>
+            tb_news.news_user=tb_stu.user_id
+            <if test="we.entity.keyword!=null and we.entity.keyword!=''">
+                AND tb_news.news_tittle LIKE '%${we.entity.keyword}%'
+            </if>
+                    order by tb_news.news_time desc
+        </where>
+    </select>
+
+    <select id="getNewsById" parameterType="Integer" resultMap="NewsPage">
+         SELECT news_id,news_tittle,news_content,news_user,news_time ,tb_stu.`name` FROM tb_news,tb_stu WHERE news_id=#{newsId} AND tb_news.news_user=tb_stu.user_id
+    </select>
+
+    <select id="getIndexNewsList" resultMap="BaseResultMap">
+        SELECT * FROM tb_news order by news_time desc limit 0,5
+    </select>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        news_id, news_tittle, news_content, news_user, news_time
+    </sql>
+
+</mapper>

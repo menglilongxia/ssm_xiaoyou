@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lgy.xiaoyou_index.mapper.TbJobMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lgy.tools.entity.TbJob">
+        <id column="job_id" property="jobId" />
+        <result column="job_company" property="jobCompany" />
+        <result column="job_name" property="jobName" />
+        <result column="job_desc" property="jobDesc" />
+        <result column="user_id" property="userId" />
+        <result column="job_time" property="jobTime" />
+        <result column="per_count" property="perCount" />
+        <result column="job_address" property="jobAddress" />
+        <result column="job_email" property="jobEmail" />
+        <result column="check_status" property="checkStatus"/>
+        <result column="check_opinion" property="checkOpinion"/>
+    </resultMap>
+
+    <resultMap id="JobPage" type="com.lgy.tools.entity.TbJob" extends="BaseResultMap">
+        <association property="tbStu" javaType="com.lgy.tools.entity.TbStu">
+            <result property="userId" column="user_id"/>
+            <result property="name" column="name"/>
+        </association>
+    </resultMap>
+
+    <select id="getAllJob" resultMap="JobPage">
+        SELECT tb_job.*,tb_stu.user_id,tb_stu.`name` FROM tb_job,tb_stu 
+        <where>
+            tb_job.user_id=tb_stu.user_id AND tb_job.check_status=1
+            <if test="we.entity.keyword!=null and we.entity.keyword!=''">
+                AND tb_job.job_name like '%${we.entity.keyword}%'
+            </if>
+        </where>
+            order by tb_job.job_time desc
+    </select>
+
+    <select id="getJobById" parameterType="Integer" resultMap="JobPage">
+        SELECT tb_job.*,tb_stu.user_id,tb_stu.`name` FROM tb_job,tb_stu WHERE tb_job.user_id=tb_stu.user_id AND  tb_job.job_id=#{jobId}
+    </select>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        job_id, job_company, job_name, job_desc, user_id, job_time, per_count, job_address
+    </sql>
+
+</mapper>

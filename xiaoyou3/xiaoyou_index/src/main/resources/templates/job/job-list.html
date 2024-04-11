@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>招聘信息-查看就业信息</title>
+	<link rel="stylesheet" href="/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/index.css">
+	<!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
+	<link href="/css/materialdesignicons.min.css" rel="stylesheet">
+	<link href="/css/style.min.css" rel="stylesheet">
+	<script src="/js/jquery.min.js"></script>
+	<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+	<script src="/js/bootstrap.min.js"></script>
+</head>
+<body class="body">
+<div th:insert="~{navigation :: copy}"></div>
+<div class="container">
+
+	<form class="pull-right search-bar" action='/job/getAllJob' id="form3" method='post' role="form">
+		<input type="hidden" name="page" id="pageNo" th:value="${page}">
+		<table>
+			<tr>
+				<td th:width="30px"> </td>
+				<td th:width="300px">
+					<div class="input-group">
+						<input type="text" class="form-control" th:value="${queryObj.getKeyword()}"
+							   name="keyword" placeholder="请输入岗位名称">
+						<span class="input-group-btn">
+                          <button class="btn btn-default" type="submit">查询</button></span>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</form>
+	<h2>招聘信息</h2>
+	<hr>
+	<div class="row">
+		<div  class="col-lg-8">
+			<dl class="row" th:each="job:${jobPage.getRecords()}">
+				<dt class="col-sm-9">
+				<a th:href="@{'/job/getJobById?jobId='+${job.jobId}}" ><span th:text="${job.jobName}"></span></a></dt>
+				<dd class="col-sm-3"><span th:text="${#temporals.format(job.jobTime,'yyyy-MM-dd')}"></span></dd>
+			</dl>
+		</div>
+		<div class="col-lg-2">
+			<button class="btn btn-danger btn-w-md" type="button" onclick="createNewAct()">发布新招聘信息</button>
+		</div>
+		<div class="pagination">
+
+			<div id="myPage"></div>
+			<link rel="stylesheet" type="text/css" href="/js/page/jquery.sPage.css">
+			<script type="text/javascript"
+					src="/js/jquery.min.js"></script>
+			<script type="text/javascript"
+					src="/js/page/jquery.sPage.min.js"></script>
+			<script type="text/javascript" th:inline="javascript">
+                //初始化分页组件
+
+                $("#myPage").sPage({
+
+                    page:[[${page}]],//当前页码，必填
+                    total:[[${jobPage.getTotal()}]],//数据总条数，必填
+                    pageSize:[[${jobPage.getSize()}]],//每页显示多少条数据，默认10条
+                    totalTxt:"共"+[[${jobPage.getTotal()}]]+"条",//数据总条数文字描述，{total}为占位符，默认"共{total}条"
+                    showTotal:true,//是否显示总条数，默认关闭：false
+                    showSkip:true,//是否显示跳页，默认关闭：false
+                    showPN:true,//是否显示上下翻页，默认开启：true
+                    prevPage:"上一页",//上翻页文字描述，默认“上一页”
+                    nextPage:"下一页",//下翻页文字描述，默认“下一页”
+                    backFun:function(page){
+                        //点击分页按钮回调函数，返回当前页码
+                        console.log(page);
+                        $("#pageNo").val(page);
+                        $("#form3").submit();
+                    }
+                });
+
+                //回调方法:点击上一页和下一页
+                function handlePaginationClick(new_page_index, pagination_container) {
+                    $("#pageNo").val(new_page_index + 1);
+                    $("#form3").submit();
+                }
+
+                function createNewAct() {
+                    location.href="/job/addNewJob"
+                }
+			</script>
+
+		</div>
+	</div>
+
+
+</div>
+
+</body>
+</html>

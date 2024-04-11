@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>新闻-查看详细</title>
+	<link rel="stylesheet" href="/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/index.css">
+	<!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
+	<link href="/css/materialdesignicons.min.css" rel="stylesheet">
+	<link href="/css/style.min.css" rel="stylesheet">
+	<script src="/js/jquery.min.js"></script>
+	<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+	<script src="/js/bootstrap.min.js"></script>
+</head>
+<body class="body">
+<div th:insert="~{navigation :: copy}"></div>
+<div class="container">
+	<div class="row">
+		<div class="col-lg-2"></div>
+		<div  class="col-lg-8">
+			<section id="content" class="mb-5">
+				<h1 id="contentTitle" style="text-align: center" th:text="${news.newsTittle}">校友管理系统-笔记：用户登录控制</h1>
+				<small class="d-inline-block text-muted mt-2 ml-1">
+        <span class="mr-3" th:text="${news.tbStu.name}">
+
+        </span>&nbsp;
+		<span class="mr-3" th:text="${#temporals.format(news.newsTime,'yyyy-MM-dd HH:mm:ss')}">
+
+        </span>
+				</small>
+				<hr>
+				<article class="mt-4" th:utext="${news.newsContent}">
+
+				</article>
+			</section>
+
+		</div>
+		<div class="col-lg-2"></div>
+	</div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lgy.xiaoyou_index.mapper.TbCommentMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lgy.xiaoyou_index.entity.TbComment">
+        <id column="id" property="id" />
+        <result column="parent_id" property="parentId" />
+        <result column="type" property="type" />
+        <result column="commentor" property="commentor" />
+        <result column="createtime" property="createtime" />
+        <result column="like_count" property="likeCount" />
+        <result column="content" property="content" />
+        <result column="commentcount" property="commentcount" />
+    </resultMap>
+
+    <resultMap id="CommentMap" type="com.lgy.xiaoyou_index.entity.TbComment" extends="BaseResultMap">
+        <association property="tbStu" javaType="com.lgy.tools.entity.TbStu">
+            <id column="user_id" property="userId" />
+            <result column="class_id" property="classId" />
+            <result column="spec_id" property="specId" />
+            <result column="depart_id" property="departId" />
+            <result column="name" property="name" />
+            <result column="username" property="username" />
+            <result column="password" property="password" />
+            <result column="sex" property="sex" />
+            <result column="is_admin" property="isAdmin"/>
+            <result column="mobile" property="mobile" />
+            <result column="job" property="job" />
+            <result column="address" property="address" />
+            <result column="stu_img" property="stuImg"/>
+        </association>
+    </resultMap>
+
+    <select id="getById" parameterType="Integer" resultMap="CommentMap">
+        select tb_stu.*,tb_comment.* from tb_comment,tb_stu where parent_id=#{id} AND tb_comment.commentor=tb_stu.user_id order by createtime desc
+    </select>
+
+    <select id="getContentById" parameterType="Integer" resultMap="BaseResultMap">
+        select content from tb_comment where id=#{outer}
+    </select>
+    
+    <select id="getParentById" parameterType="Integer" resultMap="CommentMap">
+        select * from tb_comment where id=#{id}
+    </select>
+
+    <select id="getParentIdById" parameterType="Integer" resultType="Integer">
+        select parent_id from tb_comment where id=#{id}
+    </select>
+
+    <update id="updateCommentCount" parameterType="Integer" >
+        update tb_comment set commentcount=commentcount+1 where id=#{parentId}
+    </update>
+
+    <select id="getCommentByid" parameterType="Integer" resultMap="CommentMap">
+        select tb_comment.*,tb_stu.* from tb_comment,tb_stu where tb_comment.parent_id=#{id} and type=#{type} AND  tb_comment.commentor=tb_stu.user_id order by createtime desc
+    </select>
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, parent_id, type, commentor, createtime, like_count, content, commentcount
+    </sql>
+
+</mapper>

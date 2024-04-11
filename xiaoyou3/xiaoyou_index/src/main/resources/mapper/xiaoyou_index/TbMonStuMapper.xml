@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lgy.xiaoyou_index.mapper.TbMonStuMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lgy.tools.entity.TbMonStu">
+        <id column="money_id" property="moneyId" />
+        <result column="user_id" property="userId" />
+        <result column="money_count" property="moneyCount" />
+        <result column="money_time" property="moneyTime" />
+        <result column="mon_id" property="monId" />
+        <result column="mon_status" property="monStatus" />
+        <result column="mon_type" property="monType" />
+    </resultMap>
+
+    <resultMap id="StuPage" type="com.lgy.tools.entity.TbMonStu" extends="BaseResultMap">
+        <association property="tbStu" javaType="com.lgy.tools.entity.TbStu">
+            <result column="name" property="name" />
+        </association>
+        <association property="tbDonMoney" javaType="com.lgy.tools.entity.TbDonMoney">
+            <result column="mon_name" property="monName" />
+        </association>
+    </resultMap>
+
+    <resultMap id="sumMoney" type="com.lgy.tools.entity.TbMonStu">
+        <result column="sumMoney" property="sumMoney"/>
+    </resultMap>
+
+    <select id="sumMoney" resultMap="sumMoney">
+        SELECT SUM(money_count) AS sumMoney FROM tb_mon_stu where tb_mon_stu.mon_status=1
+    </select>
+
+    <select id="getMonBymonId" parameterType="Integer" resultMap="StuPage">
+        SELECT
+            tb_stu.NAME,
+            tb_mon_stu.*
+        FROM
+            tb_stu,
+            tb_mon_stu,
+            tb_don_money
+        WHERE
+            tb_stu.user_id = tb_mon_stu.user_id
+            AND tb_don_money.mon_id = tb_mon_stu.mon_id
+            AND tb_mon_stu.mon_id = #{monId}
+            AND tb_mon_stu.mon_status=1
+    </select>
+
+    <select id="getAllMonStu" resultMap="StuPage">
+        SELECT tb_stu.name,tb_mon_stu.*,tb_don_money.mon_name FROM tb_stu,tb_mon_stu,tb_don_money WHERE tb_stu.user_id = tb_mon_stu.user_id AND tb_don_money.mon_id=tb_mon_stu.mon_id AND tb_mon_stu.mon_status=1
+    </select>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        money_id, mon_stu_id, money_count, money_time
+    </sql>
+
+</mapper>

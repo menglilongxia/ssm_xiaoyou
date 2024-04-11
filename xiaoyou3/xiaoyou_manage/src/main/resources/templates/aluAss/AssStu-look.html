@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+	<title>校友管理-校友会管理-查看校友会成员</title>
+	<link rel="icon" href="favicon.ico" type="image/ico">
+	<meta name="keywords" content="查看校友会成员">
+	<meta name="author" content="yinqi">
+	<link href="/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/css/materialdesignicons.min.css" rel="stylesheet">
+	<link href="/css/style.min.css" rel="stylesheet">
+
+</head>
+<body>
+
+
+<div class="row">
+	<div class="col-lg-12">
+
+		<div class="card">
+			<div class="card-header"><h4>校友管理- <a href="/ass/getAllAss">校友会管理</a> -查看校友会成员</h4></div>
+			<div class="card-toolbar clearfix">
+				<div class="toolbar-btn-action">
+					<form action='/ass/getAssStuById' id="form3" method='post' role="form">
+						<input type="hidden" name="page" id="pageNo" th:value="${page}">
+						<input type="hidden" name="assId" th:value="${assId}">
+					</form>
+					<a class="btn btn-danger" href="javascript:delCus()" id="delCus"><i class="mdi mdi-window-close"></i> 删除</a>
+				</div>
+			</div>
+			<div class="card-body">
+				<form name="form2" id="fm3" action="/stu" method="post">
+					<div class="table-responsive">
+						<table class="table table-bordered">
+							<thead>
+							<tr>
+								<th>
+									<label class="lyear-checkbox checkbox-primary">
+										<input type="checkbox" id="check-all" ><span></span>
+									</label>
+								</th>
+								<th>序号</th>
+								<th>姓名</th>
+								<th>性别</th>
+								<th>班级</th>
+								<th>工作</th>
+								<th>地址</th>
+								<th>操作</th>
+							</tr>
+							</thead>
+							<tbody>
+							<tr th:each="stu : ${stuPage.getRecords()}">
+
+								<td>
+									<label class="lyear-checkbox checkbox-primary">
+										<input type="checkbox" name="userId" th:value="${stu.userId}"><span></span>
+									</label>
+								</td>
+								<td th:text="${stuStat.count}">1</td>
+								<td th:text="${stu.name}"></td>
+								<td th:text="${stu.sex}">《倚天屠龙记》</td>
+								<td th:text="${stu.tbClass.className}">36</td>
+								<td th:text="${stu.job}"></td>
+								<td th:text="${stu.address}"></td>
+								<td>
+									<div class="btn-group">
+										<a class="btn btn-xs btn-danger" th:href="@{'/ass/delAssStuById?userId='+${stu.userId}+'&assId='+${assId}}"  title="删除" data-toggle="tooltip"><i class="mdi mdi-window-close"></i></a>
+									</div>
+								</td>
+							</tr>
+							</tbody>
+						</table>
+					</div>
+				</form>
+				<div class="pagination">
+
+					<div id="myPage"></div>
+					<link rel="stylesheet" type="text/css" href="/js/page/jquery.sPage.css">
+					<script type="text/javascript"
+							src="/js/jquery.min.js"></script>
+					<script type="text/javascript"
+							src="/js/page/jquery.sPage.min.js"></script>
+					<script type="text/javascript" th:inline="javascript">
+                        //初始化分页组件
+                        /*var count =[[${stuPage.getTotal()}]];
+						var size =[[${stuPage.getSize()}]];
+						var pageNO =[[${stuPage.getPages()}]];*/
+                        //alert(count+"==="+size+"==="+pageNO);
+                        $("#myPage").sPage({
+
+                            page:[[${page}]],//当前页码，必填
+                            total:[[${stuPage.getTotal()}]],//数据总条数，必填
+                            pageSize:[[${stuPage.getSize()}]],//每页显示多少条数据，默认10条
+                            totalTxt:"共"+[[${stuPage.getTotal()}]]+"条",//数据总条数文字描述，{total}为占位符，默认"共{total}条"
+                            showTotal:true,//是否显示总条数，默认关闭：false
+                            showSkip:true,//是否显示跳页，默认关闭：false
+                            showPN:true,//是否显示上下翻页，默认开启：true
+                            prevPage:"上一页",//上翻页文字描述，默认“上一页”
+                            nextPage:"下一页",//下翻页文字描述，默认“下一页”
+                            backFun:function(page){
+                                //点击分页按钮回调函数，返回当前页码
+                                console.log(page);
+                                $("#pageNo").val(page);
+                                $("#form3").submit();
+                            }
+                        });
+
+                        //回调方法:点击上一页和下一页
+                        function handlePaginationClick(new_page_index, pagination_container) {
+                            $("#pageNo").val(new_page_index + 1);
+                            $("#form3").submit();
+                        }
+
+                        $(function () {
+                            $("#check-all").click(function () {
+                                if(this.checked){
+                                    $("input[name=userId]").prop("checked",true);
+                                }else {
+                                    $("input[name=userId]").prop("checked",false);
+                                }
+
+                            });
+                            $("#checkrev").click(function () {
+                                $("input[name=userId]").each(function () {
+                                    $(this).prop("checked",!$(this).prop("checked"))
+                                });
+                            })
+                        });
+
+                        function delCus() {
+                            $("#fm3").prop("action","/ass/delAssStuById");
+                            var len=$("input[name=userId]:checked").length;
+                            if(len>0){
+                                if(confirm("你确定要删除吗?")){
+                                    $("#fm3").submit();
+                                }
+                            }else {
+                                alert("你还没有选中")
+                            }
+                        }
+                        function exp() {
+                            $("#fm3").prop("action","stu/expexl");
+                            var len=$("input[name=userId]:checked").length;
+                            if(len>0){
+                                if(confirm("是否要生成表格")){
+                                    $("#fm3").submit();
+                                }
+                            }else {
+                                alert("你还没有选中")
+                            }
+                        }
+					</script>
+
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+</div>
+
+
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/perfect-scrollbar.min.js"></script>
+<script type="text/javascript" src="/js/main.min.js"></script>
+</body>
+</html>

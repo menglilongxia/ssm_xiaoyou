@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lgy.xiaoyou_manage.mapper.TbActivityMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lgy.tools.entity.TbActivity">
+        <id column="ac_id" property="acId" />
+        <result column="ac_title" property="acTitle" />
+        <result column="ac_desc" property="acDesc" />
+        <result column="ac_per" property="acPer" />
+        <result column="ac_create_time" property="acCreateTime" />
+        <result column="ac_start_time" property="acStartTime" />
+        <result column="ac_end_time" property="acEndTime" />
+        <result column="ac_count" property="acCount" />
+        <result column="ac_status" property="acStatus" />
+        <result column="ac_Opinion" property="acOpinion"/>
+    </resultMap>
+
+    <resultMap id="ActPage" type="com.lgy.tools.entity.TbActivity" extends="BaseResultMap">
+        <association property="tbStu" javaType="com.lgy.tools.entity.TbStu">
+            <result property="userId" column="user_id"/>
+            <result property="name" column="name"/>
+        </association>
+    </resultMap>
+
+    <select id="selectActPage" resultMap="ActPage">
+        SELECT tb_activity.*,tb_stu.user_id,tb_stu.`name` FROM tb_activity,tb_stu
+        <where>
+            tb_activity.ac_per=tb_stu.user_id
+            <if test="we.entity.keyword!=null and we.entity.keyword!=''">
+                AND tb_activity.ac_title LIKE '%${we.entity.keyword}%'
+            </if>
+        </where>
+    </select>
+
+    <select id="getActById" parameterType="Integer" resultMap="ActPage">
+        SELECT tb_activity.*,tb_stu.user_id,tb_stu.`name` FROM tb_activity,tb_stu WHERE tb_activity.ac_per = tb_stu.user_id AND tb_activity.ac_id=#{acId}
+    </select>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        ac_id, ac_title, ac_desc, ac_per, ac_create_time, ac_start_time, ac_end_time, ac_status
+    </sql>
+
+</mapper>

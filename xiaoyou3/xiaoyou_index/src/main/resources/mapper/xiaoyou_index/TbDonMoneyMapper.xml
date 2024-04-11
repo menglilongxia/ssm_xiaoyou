@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lgy.xiaoyou_index.mapper.TbDonMoneyMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lgy.tools.entity.TbDonMoney">
+        <id column="mon_id" property="monId" />
+        <result column="mon_desc" property="monDesc" />
+        <result column="mon_count" property="monCount" />
+        <result column="mon_name" property="monName" />
+        <result column="mon_per" property="monPer" />
+        <result column="mon_time" property="monTime" />
+        <result column="mon_status" property="monStatus" />
+        <result column="mon_opinion" property="monOpinion" />
+        <result column="mon_had" property="monHad" />
+    </resultMap>
+
+    <resultMap id="PageMon" type="com.lgy.tools.entity.TbDonMoney" extends="BaseResultMap">
+        <association property="tbStu" javaType="com.lgy.tools.entity.TbStu">
+            <result property="userId" column="user_id"/>
+            <result property="name" column="name"/>
+        </association>
+    </resultMap>
+
+    <select id="getAllMoney" resultMap="PageMon">
+        SELECT tb_don_money.*,tb_stu.user_id,tb_stu.`name` FROM tb_don_money,tb_stu WHERE tb_don_money.mon_per=tb_stu.user_id
+        <if test="we.entity.keyword!=null and we.entity.keyword!=''">
+            and tb_don_money.mon_name like '%${we.entity.keyword}%'
+        </if>
+    </select>
+
+    <select id="getMonById" resultMap="PageMon">
+        SELECT tb_don_money.*,tb_stu.user_id,tb_stu.`name` FROM tb_don_money,tb_stu WHERE tb_don_money.mon_per=tb_stu.user_id AND tb_don_money.mon_id=#{monId}
+    </select>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        mon_id, mon_desc, mon_count, mon_name, mon_per, mon_time
+    </sql>
+
+</mapper>

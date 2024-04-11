@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lgy.xiaoyou_index.mapper.TbQuestionMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lgy.xiaoyou_index.entity.TbQuestion">
+        <id column="id" property="id" />
+        <result column="title" property="title" />
+        <result column="description" property="description" />
+        <result column="createid" property="createid" />
+        <result column="comment_count" property="commentCount" />
+        <result column="view_count" property="viewCount" />
+        <result column="like_count" property="likeCount" />
+        <result column="tag" property="tag" />
+        <result column="createtime" property="createtime" />
+    </resultMap>
+
+    <resultMap id="QuestionMap" type="com.lgy.xiaoyou_index.entity.TbQuestion" extends="BaseResultMap">
+        <association property="tbStu" javaType="com.lgy.tools.entity.TbStu">
+            <id column="user_id" property="userId" />
+            <result column="class_id" property="classId" />
+            <result column="spec_id" property="specId" />
+            <result column="depart_id" property="departId" />
+            <result column="name" property="name" />
+            <result column="username" property="username" />
+            <result column="password" property="password" />
+            <result column="sex" property="sex" />
+            <result column="is_admin" property="isAdmin"/>
+            <result column="mobile" property="mobile" />
+            <result column="job" property="job" />
+            <result column="address" property="address" />
+            <result column="stu_img" property="stuImg"/>
+        </association>
+    </resultMap>
+
+    <select id="getTitleById" parameterType="Integer" resultMap="BaseResultMap">
+        select title from tb_question where id=#{outerid}
+    </select>
+
+    <select id="getQuestionList" resultMap="BaseResultMap">
+        select * from tb_question order by createtime desc
+    </select>
+
+    <select id="getQuestionPage" resultMap="QuestionMap">
+        select tb_question.*,tb_stu.* from tb_question,tb_stu WHERE tb_question.createid=tb_stu.user_id order by createtime desc
+    </select>
+
+    <select id="getQuestionPageById" resultMap="QuestionMap">
+        select tb_question.*,tb_stu.* from tb_question,tb_stu WHERE tb_question.createid=tb_stu.user_id AND tb_stu.user_id=#{userId} order by createtime desc
+    </select>
+
+    <select id="getById" parameterType="Integer" resultMap="QuestionMap">
+        select tb_question.*,tb_stu.* from tb_question,tb_stu where tb_question.createid=tb_stu.user_id AND tb_question.id=#{id}
+    </select>
+
+    <update id="updateView" parameterType="Integer">
+        update tb_question set view_count=view_count+1 where id=#{id}
+    </update>
+
+    <select id="getByTag"  resultMap="BaseResultMap">
+        select * from tb_question where tag REGEXP #{param2} and id!=#{param1} limit 0,10
+    </select>
+
+    <select id="getTopten" resultMap="BaseResultMap">
+        select * from tb_question order by view_count desc limit 0,10
+    </select>
+
+    <select id="getNotificationPage" parameterType="Integer">
+
+    </select>
+
+    <update id="updateComment" parameterType="Integer">
+        update tb_question set comment_count=comment_count+1 where id=#{parentId}
+    </update>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, title, description, createid, comment_count, view_count, like_count, tag, createtime
+    </sql>
+
+</mapper>

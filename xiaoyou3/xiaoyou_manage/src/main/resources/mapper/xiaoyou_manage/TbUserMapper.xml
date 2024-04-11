@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lgy.xiaoyou_manage.mapper.TbUserMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lgy.tools.entity.TbUser">
+        <id column="uid" property="uid" />
+        <result column="username" property="username" />
+        <result column="password" property="password" />
+    </resultMap>
+
+    <select id="selectByUserName" parameterType="String" resultMap="BaseResultMap">
+        SELECT tb_user.* FROM tb_user,tb_stu WHERE tb_user.uid=tb_stu.user_id AND tb_user.username=#{username} AND tb_stu.is_admin=1
+    </select>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        uid, username, password
+    </sql>
+
+</mapper>

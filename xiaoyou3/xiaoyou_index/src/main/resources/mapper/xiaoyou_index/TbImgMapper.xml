@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lgy.xiaoyou_index.mapper.TbImgMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lgy.tools.entity.TbImg">
+        <id column="img_id" property="imgId" />
+        <result column="img_name" property="imgName" />
+        <result column="img_url" property="imgUrl" />
+        <result column="img_state" property="imgState" />
+        <result column="img_time" property="imgTime" />
+    </resultMap>
+
+    <select id="getAllImg" resultMap="BaseResultMap">
+        select * from tb_img
+        <where>
+            <if test="we.entity.keyword!=null and we.entity.keyword!=''">
+                img_name LIKE '%${we.entity.keyword}%'
+            </if>
+        </where>
+         order by img_time desc
+    </select>
+
+    <select id="changeStatusById" parameterType="Integer" resultMap="BaseResultMap">
+        UPDATE tb_img SET img_state=${imgState} WHERE tb_img.img_id=${imgId}
+    </select>
+
+    <select id="getIndexImgList" resultMap="BaseResultMap">
+        select * from tb_img where img_state=1 order by img_time
+    </select>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        img_id, img_name, img_state
+    </sql>
+
+</mapper>

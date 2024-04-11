@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>校友活动-创建校友活动</title>
+	<link rel="stylesheet" href="/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/index.css">
+	<!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
+	<link href="/css/materialdesignicons.min.css" rel="stylesheet">
+
+	<!--时间选择插件-->
+	<link rel="stylesheet" href="/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css">
+	<link rel="stylesheet" href="/js/jconfirm/jquery-confirm.min.css">
+
+	<link href="/css/style.min.css" rel="stylesheet">
+</head>
+<body class="body">
+<div th:insert="~{navigation :: copy}"></div>
+<div class="container">
+	<h2>创建校友活动</h2>
+	<hr>
+	<div class="row">
+		<div class="lyear-layout-sidebar-scroll ps ps--active-y"></div>
+		<div class="col-lg-8">
+			<form action="/act/addAct" method="post" class="row" id="form1">
+				<div class="form-group col-md-12"></div>
+				<div class="form-group col-md-10">
+					<label for="acTitle">活动名称</label>
+					<input type="text" class="form-control" id="acTitle" name="acTitle" placeholder="活动名称"  required="required"/>
+				</div>
+
+				<div class="form-group col-md-12"></div>
+				<div class="form-group col-md-10">
+					<label for="acDesc">活动描述</label>
+					<textarea type="text" class="form-control" id="acDesc" name="acDesc"  placeholder="输入活动具体内容" required="required"></textarea>
+				</div>
+
+				<div class="form-group col-md-12"></div>
+				<div class="form-group col-md-10">
+					<label for="acCount">报名人数</label>
+					<input type="text" class="form-control" id="acCount" name="acCount" placeholder="输入数量"  required="required"/>
+				</div>
+
+
+				<div class="form-group col-md-12"></div>
+				<div class="form-group col-md-10">
+					<label for="acStartTime">活动开始时间</label>
+					<input class="form-control js-datetimepicker" type="text" id="acStartTime" name="acStartTime" placeholder="请选择具体时间" value=""  data-side-by-side="true" data-locale="zh-cn" data-format="YYYY-MM-DD HH:mm" required="required">
+				</div>
+
+				<div class="form-group col-md-12"></div>
+				<div class="form-group col-md-10">
+					<label for="acEndTime">活动结束时间</label>
+					<input class="form-control js-datetimepicker" type="text" id="acEndTime" name="acEndTime" placeholder="请选择具体时间" value=""  data-side-by-side="true" data-locale="zh-cn" data-format="YYYY-MM-DD HH:mm" required="required">
+				</div>
+
+
+				<div class="col-md-12">
+					<button type="button" class="btn btn-primary ajax-post" target-form="add-form" onclick="addAct()">确 定</button>
+					<button type="button" class="btn btn-default" onclick="javascript:history.back(-1);return false;">返 回</button>
+				</div>
+			</form>
+
+		</div>
+	</div>
+</div>
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<script type="text/javascript" src="/js/axios.min.js"></script>
+
+<script type="text/javascript" src="/js/jquery.minV2.1.4.js"></script>
+<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/perfect-scrollbar.min.js"></script>
+<!--时间选择插件-->
+<script src="/js/bootstrap-datetimepicker/moment.min.js"></script>
+<script src="/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+<script src="/js/bootstrap-datetimepicker/locale/zh-cn.js"></script>
+<!--日期选择插件-->
+<script src="/js/jconfirm/jquery-confirm.min.js"></script>
+<script type="text/javascript" src="/js/main.min.js"></script>
+<script type="text/javascript">
+
+    function addAct() {
+        axios.post('/act/addAct',$('#form1').serialize())
+            .then(function (response) {
+                var data=response.data;
+                if(data==1){
+                    $.alert({
+                        title: '创建活动',
+                        content: '创建成功，请等待后台审核',
+                        buttons: {
+                            confirm: {
+                                text: '确认',
+                                btnClass: 'btn-primary',
+                                action: function(){
+                                    location.href="/act/getAllAct"
+                                }
+                            },
+                            cancel: {
+                                text: '取消',
+                            }
+                        }
+                    });
+
+                }else if(data==2){
+                    $.alert({
+                        title: '创建活动',
+                        content: '创建失败，已有该活动',
+                        buttons: {
+                            confirm: {
+                                text: '确认',
+                                btnClass: 'btn-primary',
+                            },
+                            cancel: {
+                                text: '取消',
+                            }
+                        }
+                    });
+                }else {
+                    $.alert({
+                        title: '创建活动',
+                        content: '创建失败，再次检查信息',
+                        buttons: {
+                            confirm: {
+                                text: '确认',
+                                btnClass: 'btn-primary',
+                            },
+                            cancel: {
+                                text: '取消',
+                            }
+                        }
+                    });
+				}
+            }).catch(function (error) {
+            $.alert({
+                title: '创建活动',
+                content: '创建失败，再次检查信息',
+                buttons: {
+                    confirm: {
+                        text: '确认',
+                        btnClass: 'btn-primary',
+                    },
+                    cancel: {
+                        text: '取消',
+                    }
+                }
+            });
+        })
+    }
+
+
+</script>
+</body>
+</html>

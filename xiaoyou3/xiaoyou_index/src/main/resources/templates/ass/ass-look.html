@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>活动-查看详细</title>
+	<link rel="stylesheet" href="/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/index.css">
+	<!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
+	<link href="/css/materialdesignicons.min.css" rel="stylesheet">
+	<link href="/css/style.min.css" rel="stylesheet">
+	<script src="/js/jquery.min.js"></script>
+	<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+	<script src="/js/bootstrap.min.js"></script>
+</head>
+<body class="body">
+<div th:insert="~{navigation :: copy}"></div>
+<div class="container">
+	<h2 th:text="${ass.assName}"></h2>
+	<hr>
+	<div class="row">
+		<!--<form  action='/news/getAllNews' id="form3" method='post' role="form">
+			<input type="hidden" name="page" id="pageNo" th:value="${page}">
+		</form>-->
+		<div  class="col-lg-8">
+			<dl class="row">
+				<dt class="col-sm-3"><span>简介</span></dt>
+				<dd class="col-sm-9"><span th:text="${ass.assDescription}"></span></dd>
+			</dl>
+			<dl class="row">
+				<dt class="col-sm-3"><span>QQ群</span></dt>
+				<dd class="col-sm-9"><span th:text="${ass.assGroup}"></span></dd>
+			</dl>
+			<dl class="row">
+				<dt class="col-sm-3"><span>会长</span></dt>
+				<dd class="col-sm-9"><span th:text="${ass.tbStu.name}"></span></dd>
+			</dl>
+			<dl class="row">
+				<dt class="col-sm-3"><span>联系方式</span></dt>
+				<dd class="col-sm-9"><span th:text="${ass.assCon}"></span></dd>
+			</dl>
+			<dl class="row">
+				<dt class="col-sm-3"><span>创建时间</span></dt>
+				<dd class="col-sm-9"><span th:text="${#temporals.format(ass.assCreatetime,'yyyy-MM-dd')}"></span></dd>
+			</dl>
+		</div>
+		<div class="col-lg-2">
+			<button class="btn btn-success btn-w-md" type="button" th:onclick="'javascript:addAss('+${ass.assId}+')' ">加入校友会</button>
+		</div>
+		</div>
+</div>
+<script type="text/javascript" src="/js/axios.min.js"></script>
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript">
+	
+	function addAss(assid) {
+	    axios.get('/ass/addStuToAss?assId='+assid)
+			.then(function (response) {
+			    var data=response.data;
+			    if(data==1){
+			        alert("加入成功，更多信息请加入相关QQ群");
+				}else if(data==2){
+			        alert("你已加入该校友会，无需再次加入")
+				}
+        }).catch(function (error) {
+            alert("加入失败，请审核你的信息是否有误")
+        })
+    }
+	
+</script>
+
+</body>
+</html>

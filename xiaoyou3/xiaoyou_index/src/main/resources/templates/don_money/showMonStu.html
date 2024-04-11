@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+	<title>项目捐赠名录</title>
+	<link rel="icon" href="favicon.ico" type="image/ico">
+	<meta name="keywords" content="查看校友会成员">
+	<meta name="author" content="yinqi">
+	<link rel="stylesheet" href="/css/index.css">
+	<link href="/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/css/materialdesignicons.min.css" rel="stylesheet">
+	<link href="/css/style.min.css" rel="stylesheet">
+
+</head>
+<body class="body">
+<div th:insert="~{navigation :: copy}"></div>
+<div class="container">
+	<h2>项目捐赠名录</h2>
+	<hr>
+<div class="row">
+	<div class="col-lg-8">
+
+
+				<form name="form2" id="fm3" action="/stu" method="post">
+					<div class="table-responsive">
+						<table class="table table-bordered">
+							<thead>
+							<tr>
+
+								<th>项目</th>
+								<th>姓名</th>
+								<th>捐款金额</th>
+								<th>捐款时间</th>
+							</tr>
+							</thead>
+							<tbody>
+							<tr th:each="monStu : ${monStuPage.getRecords()}">
+
+								<td th:text="${monStu.tbDonMoney.monName}">1</td>
+								<td th:text="${monStu.tbStu.name}"></td>
+								<td th:text="${monStu.moneyCount}">《倚天屠龙记》</td>
+								<td th:text="${#temporals.format(monStu.moneyTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+							</tr>
+							</tbody>
+						</table>
+					</div>
+				</form>
+				<div class="pagination">
+
+					<div id="myPage"></div>
+					<link rel="stylesheet" type="text/css" href="/js/page/jquery.sPage.css">
+					<script type="text/javascript"
+							src="/js/jquery.min.js"></script>
+					<script type="text/javascript"
+							src="/js/page/jquery.sPage.min.js"></script>
+					<script type="text/javascript" th:inline="javascript">
+                        $("#myPage").sPage({
+
+                            page:[[${page}]],//当前页码，必填
+                            total:[[${monStuPage.getTotal()}]],//数据总条数，必填
+                            pageSize:[[${monStuPage.getSize()}]],//每页显示多少条数据，默认10条
+                            totalTxt:"共"+[[${monStuPage.getTotal()}]]+"条",//数据总条数文字描述，{total}为占位符，默认"共{total}条"
+                            showTotal:true,//是否显示总条数，默认关闭：false
+                            showSkip:true,//是否显示跳页，默认关闭：false
+                            showPN:true,//是否显示上下翻页，默认开启：true
+                            prevPage:"上一页",//上翻页文字描述，默认“上一页”
+                            nextPage:"下一页",//下翻页文字描述，默认“下一页”
+                            backFun:function(page){
+                                //点击分页按钮回调函数，返回当前页码
+                                console.log(page);
+                                $("#pageNo").val(page);
+                                $("#form3").submit();
+                            }
+                        });
+
+                        //回调方法:点击上一页和下一页
+                        function handlePaginationClick(new_page_index, pagination_container) {
+                            $("#pageNo").val(new_page_index + 1);
+                            $("#form3").submit();
+                        }
+
+                        $(function () {
+                            $("#check-all").click(function () {
+                                if(this.checked){
+                                    $("input[name=moneyId]").prop("checked",true);
+                                }else {
+                                    $("input[name=moneyId]").prop("checked",false);
+                                }
+
+                            });
+                            $("#checkrev").click(function () {
+                                $("input[name=moneyId]").each(function () {
+                                    $(this).prop("checked",!$(this).prop("checked"))
+                                });
+                            })
+                        });
+					</script>
+
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+
+
+
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/perfect-scrollbar.min.js"></script>
+<script type="text/javascript" src="/js/main.min.js"></script>
+</body>
+</html>

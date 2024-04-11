@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+	<title>注册 - 咸师校友</title>
+	<link rel="icon" href="favicon.ico" type="image/ico">
+	<meta name="keywords" content="咸师校友">
+	<meta name="description" content="咸师校友">
+	<meta name="author" content="yinqi">
+	<link href="/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/css/materialdesignicons.min.css" rel="stylesheet">
+	<link href="/css/style.min.css" rel="stylesheet">
+	<style>
+		.lyear-wrapper {
+			position: relative;
+		}
+		.lyear-login {
+			display: flex !important;
+			min-height: 100vh;
+			align-items: center !important;
+			justify-content: center !important;
+		}
+		.login-center {
+			background: #fff;
+			min-width: 38.25rem;
+			padding: 2.14286em 3.57143em;
+			border-radius: 5px;
+			margin: 2.85714em 0;
+		}
+		.login-header {
+			margin-bottom: 1.5rem !important;
+		}
+		.login-center .has-feedback.feedback-left .form-control {
+			padding-left: 38px;
+			padding-right: 12px;
+		}
+		.login-center .has-feedback.feedback-left .form-control-feedback {
+			left: 0;
+			right: auto;
+			width: 38px;
+			height: 38px;
+			line-height: 38px;
+			z-index: 4;
+			color: #dcdcdc;
+		}
+		.login-center .has-feedback.feedback-left.row .form-control-feedback {
+			left: 15px;
+		}
+	</style>
+</head>
+
+<body>
+<div class="row lyear-wrapper">
+	<div class="lyear-login">
+		<div class="login-center">
+			<div class="login-header text-center">
+				<a href="javascript:void (0)"> <img alt="light year admin" src="/images/logo-sidebar.png"> </a>
+			</div>
+			<!--<form action="/stu/SaveRegister" id="register" method="post">
+				<div class="form-group has-feedback feedback-left">
+					<label for="username"></label><input type="text" placeholder="请输入您的用户名" class="form-control" name="username" id="username" onchange="checkUserName()" />
+					<span class="mdi mdi-account form-control-feedback" aria-hidden="true"></span>
+				</div>
+				<div class="form-group has-feedback feedback-left">
+					<label for="password"></label><input type="password" placeholder="请输入密码" class="form-control" id="password" name="password" />
+					<span class="mdi mdi-lock form-control-feedback" aria-hidden="true"></span>
+				</div>
+				<div class="form-group">
+
+					<button class="btn btn-block btn-primary" type="button" onclick="register()">注册</button>
+				</div>
+			</form>-->
+			<div class="col-md-4"></div>
+			<div class="col-md-4">
+			<form action="/stu/SaveRegister" method="post" class="row" id="register" enctype="multipart/form-data">
+
+
+				<div class="form-group col-md-12">
+				<div class="form-group has-feedback feedback-left">
+					<label for="username"></label><input type="text" placeholder="请输入您的用户名" class="form-control" name="username" id="username" required/>
+					<span class="mdi mdi-account form-control-feedback" aria-hidden="true"></span>
+				</div>
+				</div>
+				<div class="form-group col-md-12"></div>
+				<div class="form-group col-md-12">
+				<div class="form-group has-feedback feedback-left">
+					<label for="password"></label><input type="password" placeholder="请输入密码" class="form-control" id="password" name="password" required/>
+					<span class="mdi mdi-lock form-control-feedback" aria-hidden="true"></span>
+				</div>
+				</div>
+				<div class="form-group col-md-12"></div>
+				<div class="form-group col-md-12">
+					<label for="departId">院系</label>
+					<div class="form-controls">
+						<select name="departId" class="form-control" id="departId" onchange="getSpec()" required>
+							<option value="0">选择院系</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="form-group col-md-12"></div>
+				<div class="form-group col-md-12">
+					<label for="specId">专业</label>
+					<div class="form-controls">
+						<select name="specId" class="form-control" id="specId" onchange="getClass()" required>
+							<option value="0">选择专业</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="form-group col-md-12"></div>
+				<div class="form-group col-md-12">
+					<label for="classId">班级</label>
+					<div class="form-controls">
+						<select name="classId" class="form-control" id="classId" required>
+							<option value="0">选择班级</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group col-md-12"></div>
+				<div class="form-group col-md-12">
+					<label for="name">姓名</label>
+					<input type="text" class="form-control" id="name" name="name" placeholder="请输入姓名" required/>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-12" for="stuImg">上传头像</label>
+					<div class="col-xs-12">
+
+						<input type="file" accept="image/jpg,image/png,image/gif" id="stuImg" name="file" onchange="fileChange(this)" required>
+					</div>
+				</div>
+				<div class="form-group col-md-12"></div>
+				<div class="form-group col-md-12">
+					<label>性别</label>
+					<div class="clearfix">
+						<label class="lyear-radio radio-inline radio-primary">
+							<input type="radio" name="sex"  value="男" required><span>男</span>
+						</label>
+						<label class="lyear-radio radio-inline radio-primary">
+							<input type="radio" name="sex" value="女" required><span>女</span>
+						</label>
+					</div>
+				</div>
+
+				<div class="form-group col-md-12"></div>
+				<div class="form-group col-md-12">
+					<label for="mobile">手机</label>
+					<input type="text" class="form-control" id="mobile" name="mobile"  placeholder="请输入手机号" required/>
+				</div>
+
+				<div class="form-group col-md-12"></div>
+				<div class="form-group col-md-12">
+					<label for="email">email</label>
+					<input type="email" class="form-control" id="email" name="email"  placeholder="请输入邮箱" required/>
+				</div>
+
+				<div class="form-group col-md-12"></div>
+				<div class="form-group col-md-12">
+					<label for="job">工作信息</label>
+					<input type="text" class="form-control" id="job" name="job" required />
+				</div>
+				<div class="form-group col-md-12"></div>
+				<div class="form-group col-md-12">
+					<label for="address">地址</label>
+					<input type="text" class="form-control" id="address" name="address"  required />
+				</div>
+
+				<div class="form-group col-md-12">
+					<button type="button" class="btn btn-primary ajax-post" onclick="register()" target-form="add-form">注册</button>
+					<button type="button" class="btn btn-default" onclick="javascript:history.back(-1);return false;">返 回</button>
+				</div>
+			</form>
+			</div>
+			<div class="col-md-4"></div>
+
+			<hr>
+			<footer class="col-sm-12 text-center">
+				<p class="m-b-0">Copyright © 2024 <a href="https://www.xync.edu.cn/xyw/index.htm">咸阳师范学院</a>. All right reserved</p>
+			</footer>
+		</div>
+	</div>
+</div>
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/perfect-scrollbar.min.js"></script>
+<script type="text/javascript" src="/js/main.min.js"></script>
+<script type="text/javascript" src="/js/axios.min.js"></script>
+<script type="text/javascript">
+
+    $(function () {
+        //异步请求获取所有的院系
+        axios.post('/dep/getAllDepart')
+            .then(function (response) {
+                var data=response.data;
+                console.log(data);
+                $.each(data,function (index,depart) {
+
+                    $("#departId").append("<option value="+depart.departId+">"+depart.departName+"</option>")
+                })
+            })
+    });
+    function getSpec() {
+        $("#specId").html("<option value=\"0\">选择专业</option>");
+        //根据院系ID，异步请求获取对应的专业信息，
+        var departId=$("#departId").val();
+        axios.get('/spec/getSpecById?departId='+departId)
+            .then(function (response) {
+                var data=response.data;
+                console.log(data);
+                $.each(data,function (index,spec) {
+
+                    $("#specId").append("<option value="+spec.specId+">"+spec.specname+"</option>")
+                })
+            })
+    }
+    function getClass() {
+        $("#classId").html("<option value=\"0\">选择班级</option>");
+        //根据专业ID，异步请求获取对应的班级信息，
+        var specId = $("#specId").val();
+        axios.get('/cla/getClaById?specId='+specId)
+            .then(function (response) {
+                var data=response.data;
+                console.log(data);
+                $.each(data,function (index,cla) {
+                    $("#classId").append("<option value="+cla.classId+">"+cla.className+"</option>")
+                })
+            })
+    }
+
+    function fileChange(target) {
+        var fileSize = 0;
+        fileSize = target.files[0].size;
+        var size = fileSize / 1024;
+        if (size > 1000) {
+            alert("附件不能大于1M");
+            target.value = "";
+            return false;   //阻止submit提交
+        }
+        var name = target.value;
+        var fileName = name.substring(name.lastIndexOf(".") + 1).toLowerCase();
+        if (fileName != "jpg" && fileName != "png"&&fileName!="gif"&&fileName!="jpeg") {
+            alert("请选择图片格式文件上传(jpg、png、gif)！");
+            target.value = "";
+            return false;   //阻止submit提交
+        }
+    }
+
+    function register() {
+        var username=$('#username').val();
+        if(username==""){
+            alert("账号不能为空");
+            return false;
+		}
+        if($('#password').val()==""){
+            alert("密码不能为空");
+            return false;
+		}
+        if($('#departId').val()==0){
+            alert("请选择院系");
+            return false;
+		}
+        if($('#specId').val()==0){
+            alert("请选择专业");
+            return false;
+		}
+        if($('#classId').val()==0){
+            alert("请选择班级");
+            return false;
+		}
+        if($('#name').val()==""){
+            alert("请填写姓名");
+			return false;
+		}
+        if($("input[name='sex']:checked").val()==null){
+            alert("请选择性别");
+            return false;
+		}
+        if($('#mobile').val()==""){
+            alert("手机号不能为空");
+            return false;
+		}
+
+        if($('#email').val()==""){
+            alert("邮箱不能为空");
+            return false;
+        }
+
+        if($('#job').val()==""){
+            alert("工作信息不能为空");
+            return false;
+		}
+        if($('#address').val()==""){
+            alert("地址信息不能为空");
+            return false;
+		}
+        console.log(username);
+        axios.get("/stu/checkUser?username="+username)
+		.then(function (response) {
+            var data=response.data;
+            if(data==0){
+                alert("账号已存在");
+				return false;
+            }else {
+                $('#register').submit();
+            }
+        }).catch(function (error) {
+            alert("注册失败，请审核你的信息是否有误")
+        });
+    }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+	<title>校友管理-校友会管理-审核</title>
+	<link rel="icon" href="favicon.ico" type="image/ico">
+	<meta name="keywords" content="审核">
+	<meta name="author" content="yinqi">
+	<link href="/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/css/materialdesignicons.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="/js/jconfirm/jquery-confirm.min.css">
+	<link href="/css/style.min.css" rel="stylesheet">
+
+</head>
+<body>
+<div class="row">
+	<div class="col-lg-12">
+		<div class="card">
+			<div class="card-body">
+
+				<form action="/ass/updateAssById" method="post" class="row" >
+					<input type="hidden" name="assId" id="assId" th:value="${ass.assId}">
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-4">
+						<label for="assName">校友会名称</label>
+						<input type="text" class="form-control" id="assName" name="assName" th:value="${ass.assName}" readonly/>
+					</div>
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-12"></div>
+
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-4">
+						<label for="assDescription">校友会简介</label>
+						<textarea type="text" class="form-control" id="assDescription" name="assDescription" th:text="${ass.assDescription}" readonly></textarea>
+					</div>
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-12"></div>
+
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-4">
+						<label for="assGroup">QQ群</label>
+						<input type="text" class="form-control" id="assGroup" name="assGroup" th:value="${ass.assGroup}" readonly/>
+					</div>
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-12"></div>
+
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-4">
+						<input type="hidden" name="assPer" id="assPer" th:value="${ass.assPer}">
+						<label for="assPer">会长</label>
+						<input type="text" class="form-control" id="PerName"  th:value="${ass.tbStu.name}" readonly/>
+					</div>
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-12"></div>
+
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-4">
+						<label for="assCon">联系方式</label>
+						<input type="text" class="form-control" id="assCon" name="assPer" th:value="${ass.assCon}" readonly/>
+					</div>
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-12"></div>
+
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-4">
+						<label for="assCreatetime">创建时间</label>
+						<input type="text" class="form-control" id="assCreatetime" name="assCreatetime" th:value="${#temporals.format(ass.assCreatetime,'yyyy-MM-dd HH:mm:ss')}" readonly/>
+					</div>
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-12"></div>
+
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-4">
+						<label>审核状态</label>
+						<div class="clearfix">
+							<label class="lyear-radio radio-inline radio-primary">
+								<input type="radio" name="assStatus" value="0" th:checked="${ass.assStatus==0}"><span>未审核</span>
+							</label>
+							<label class="lyear-radio radio-inline radio-primary">
+								<input type="radio" name="assStatus" value="1" th:checked="${ass.assStatus==1}"><span>审核通过</span>
+							</label>
+							<label class="lyear-radio radio-inline radio-primary">
+								<input type="radio" name="assStatus" value="2" th:checked="${ass.assStatus==2}"><span>审核不通过</span>
+							</label>
+						</div>
+					</div>
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-12"></div>
+
+
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-4">
+						<label for="assOpinion">审核意见</label>
+						<textarea type="text" class="form-control" id="assOpinion" name="assOpinion" th:text="${ass.assOpinion}"  required></textarea>
+					</div>
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-12"></div>
+
+					<div class="form-group col-md-4"></div>
+					<div class="form-group col-md-4">
+						<button type="button" onclick="subAss()" class="btn btn-primary ajax-post" target-form="add-form">确 定</button>
+						<button type="button" class="btn btn-default" onclick="javascript:history.back(-1);return false;">返 回</button>
+					</div>
+				</form>
+
+			</div>
+		</div>
+	</div>
+
+</div>
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/perfect-scrollbar.min.js"></script>
+<script src="/js/bootstrap-notify.min.js"></script>
+<script type="text/javascript" src="/js/lightyear.js"></script>
+<script type="text/javascript" src="/js/main.min.js"></script>
+<script type="text/javascript" src="/js/axios.min.js"></script>
+<script src="/js/jconfirm/jquery-confirm.min.js"></script>
+<script type="text/javascript">
+    function subAss(){
+        var assId=$('#assId').val();
+        var assStatus=$("input[name='assStatus']:checked").val();
+        var assOpinion=$('#assOpinion').val();
+        var assPer=$('#assPer').val();
+        lightyear.loading('show');
+        axios.get('/ass/updateAssById?assId='+assId+"&assStatus="+assStatus+"&assOpinion="+assOpinion+"&assPer="+assPer).then(function (response) {
+            var data=response.data;
+            console.log(data);
+            if(data==1){
+                $.alert({
+                    title: '校友会审核',
+                    content: '审核成功，确认返回主页',
+                    buttons: {
+                        confirm: {
+                            text: '确认',
+                            btnClass: 'btn-primary',
+                            action: function () {
+                                location.href = "/ass/getAllAss"
+                            }
+                        }
+                    }
+                });
+            }else {
+                $.confirm({
+                    title: '校友会审核',
+                    content: '审核失败，检查审核信息',
+                    type: 'red',
+                    buttons: {
+                        tryAgain: {
+                            text: '确认',
+                            btnClass: 'btn-red',
+                        }
+                    }
+                });
+            }
+        })
+
+        setTimeout(function() {
+            lightyear.loading('hide');
+            lightyear.notify('系统审核中，请等待~', 'success', 3000,'mdi mdi-emoticon-happy', 'top', 'center');
+        }, 1e3)
+
+    }
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lgy.xiaoyou_index.mapper.TbAssMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lgy.tools.entity.TbAss">
+        <id column="ass_id" property="assId" />
+        <result column="ass_name" property="assName" />
+        <result column="ass_description" property="assDescription" />
+        <result column="ass_per" property="assPer" />
+        <result column="ass_con" property="assCon" />
+        <result column="ass_group" property="assGroup" />
+        <result column="ass_opinion" property="assOpinion"/>
+        <result column="ass_createtime" property="assCreatetime" />
+        <result column="ass_examinetime" property="assExaminetime"/>
+        <result column="ass_status" property="assStatus"/>
+    </resultMap>
+
+    <resultMap id="AssPage" type="com.lgy.tools.entity.TbAss" extends="BaseResultMap">
+        <association property="tbStu" javaType="com.lgy.tools.entity.TbStu">
+            <result column="name" property="name" />
+        </association>
+    </resultMap>
+
+    <select id="selectAssPage" resultMap="AssPage">
+        select tb_ass.*,tb_stu.name from tb_ass,tb_stu
+        <where>
+        tb_stu.user_id=tb_ass.ass_per and ass_status=1
+            <if test="we.entity.keyword!=null and we.entity.keyword!=''">
+            and tb_ass.ass_name like '%${we.entity.keyword}%'
+            </if>
+        </where>
+        order by tb_ass.ass_createtime desc
+    </select>
+
+    <select id="getAssById" parameterType="Integer" resultMap="AssPage">
+        select tb_ass.*,tb_stu.name from tb_ass,tb_stu where tb_stu.user_id=tb_ass.ass_per and tb_ass.ass_id=#{assId}
+    </select>
+
+    <select id="getIndexAssList" resultMap="BaseResultMap">
+        select ass_id,ass_name from tb_ass where ass_status=1 order by ass_createtime desc limit 0,5
+    </select>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        ass_id, ass_name, ass_description, ass_per, ass_con, ass_group, ass_createtime
+    </sql>
+
+</mapper>

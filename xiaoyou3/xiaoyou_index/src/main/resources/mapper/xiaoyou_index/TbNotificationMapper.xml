@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lgy.xiaoyou_index.mapper.TbNotificationMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lgy.xiaoyou_index.entity.TbNotification">
+        <id column="id" property="id" />
+        <result column="notifier" property="notifier" />
+        <result column="receiver" property="receiver" />
+        <result column="outerid" property="outerid" />
+        <result column="type" property="type" />
+        <result column="createtime" property="createtime" />
+        <result column="status" property="status" />
+    </resultMap>
+    <resultMap id="NotificationMap" type="com.lgy.xiaoyou_index.entity.TbNotification" extends="BaseResultMap">
+        <association property="tbStu" javaType="com.lgy.tools.entity.TbStu">
+            <id column="user_id" property="userId" />
+            <result column="class_id" property="classId" />
+            <result column="spec_id" property="specId" />
+            <result column="depart_id" property="departId" />
+            <result column="name" property="name" />
+            <result column="username" property="username" />
+            <result column="password" property="password" />
+            <result column="sex" property="sex" />
+            <result column="is_admin" property="isAdmin"/>
+            <result column="mobile" property="mobile" />
+            <result column="job" property="job" />
+            <result column="address" property="address" />
+            <result column="stu_img" property="stuImg"/>
+        </association>
+        <association property="tbComment" javaType="com.lgy.xiaoyou_index.entity.TbComment">
+            <id column="id" property="id" />
+            <result column="parent_id" property="parentId" />
+            <result column="type" property="type" />
+            <result column="commentor" property="commentor" />
+            <result column="createtime" property="createtime" />
+            <result column="like_count" property="likeCount" />
+            <result column="content" property="content" />
+            <result column="commentcount" property="commentcount" />
+        </association>
+    </resultMap>
+
+    <update id="updateStatus" parameterType="Integer">
+        update tb_notification set status=1 where id=#{id} and status=0
+    </update>
+
+    <select id="getTypeByid" parameterType="Integer" resultType="Integer">
+        select type from tb_notification where id=#{id}
+    </select>
+
+    <select id="getOuterIdById" parameterType="Integer" resultType="Integer">
+        select outerid from tb_notification where id=#{id}
+    </select>
+
+    <select id="getNotificationPage" resultMap="NotificationMap">
+	SELECT
+		n.*,
+		s.*,
+		c.content
+	FROM
+		tb_notification n,
+		tb_stu s,
+		tb_comment c
+	WHERE
+		n.receiver = #{userId}
+		AND n.notifier = s.user_id
+		AND n.outerid = c.parent_id
+		AND n.`status` = 0
+	GROUP BY
+		n.id
+	ORDER BY
+	n.createtime DESC
+    </select>
+
+    <select id="getUnReadCount" parameterType="Integer" resultType="Integer">
+        select count(1) from tb_notification where receiver=#{id} and status=0
+    </select>
+
+    <insert id="insertNotification" parameterType="com.lgy.xiaoyou_index.entity.TbNotification" >
+        insert into tb_notification(notifier,receiver,outerid,type,createtime,status) values (#{notifier},#{receiver},#{outerid},#{type},#{createtime},#{status})
+    </insert>
+
+
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, notifier, receiver, outerid, type, createtime, status
+    </sql>
+
+</mapper>

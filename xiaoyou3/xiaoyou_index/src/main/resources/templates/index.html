@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head style="color: #f5f6fa" id="headColor">
+	<meta charset="UTF-8">
+	<title>首页</title>
+	<link rel="stylesheet" href="/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/index.css">
+	<link href="/css/materialdesignicons.min.css" rel="stylesheet">
+	<link href="/css/style.min.css" rel="stylesheet">
+</head>
+<body class="body">
+<div th:insert="~{navigation :: copy}"></div>
+<div class="container-fluid main">
+	<div class="row clearfix">
+		<div class="col-md-12 column" style="padding-left: 0px;padding-right: 0px;">
+			<div class="carousel slide" id="carousel-685432">
+				<ol class="carousel-indicators">
+					<li class="active" data-slide-to="0" data-target="#carousel-685432">
+					</li>
+					<th:block th:each="img : ${imgList} " >
+						<li th:data-slide-to="${imgStat.count}" data-target="#carousel-685432">
+						</li>
+					</th:block>
+				</ol>
+				<div class="carousel-inner">
+					<div style="height: 424px" class="item active">
+						<img style="width: 100%;height: 100%" th:alt="${img.imgName}" th:src="${img.imgUrl}"/>
+					</div>
+
+					<th:block th:each="img : ${imgList} ">
+						<div style="height: 424px" class="item">
+							<img style="width: 100%;height: 100%" th:alt="${img.imgName}" th:src="${img.imgUrl}"/>
+						</div>
+					</th:block>
+
+				</div>
+				<a class="left carousel-control" href="#carousel-685432" data-slide="prev">
+					<span class="icon-left-open-big icon-prev"></span></a>
+				<a class="right carousel-control" href="#carousel-685432" data-slide="next">
+					<span class="icon-right-open-big icon-next"></span></a>
+			</div>
+		</div>
+	</div>
+</div>
+<br>
+	<div class="container-fluid main">
+	<div class="row">
+		<div class="col-md-3 column" style="padding-left: 0px;padding-right: 0px;">
+			<div class="card">
+				<div class="card-header" style="background-color: #971515;">
+				<span>校友会</span>
+					<ul class="card-actions">
+						<li><a href="/ass/getAllAss" style="color: #ffffff">查看更多</a></li>
+					</ul>
+				</div>
+				<div class="card-body">
+					<ul class="list-group" th:each="ass:${tbAssList}">
+						<li class="list-group-item">
+							<a th:href="@{'/ass/getAssById?assId='+${ass.assId}}"><span th:text="${ass.assName}"></span></a>
+						</li>
+					</ul>
+				</div>
+
+			</div>
+		</div>
+		<div class="col-md-6 column" style="padding-left: 0px;padding-right: 0px;">
+			<div class="card">
+				<div class="card-header" style="background-color: #971515;">
+			<span>新闻</span>
+					<ul class="card-actions">
+						<li><a href="/news/getAllNews" style="color: #ffffff">查看更多</a></li>
+					</ul>
+				</div>
+				<div class="card-body">
+					<dl class="row" th:each="news:${tbNewsList}">
+						<dt class="col-sm-9"><a th:href="@{'/news/getNewsById?newsId='+${news.newsId}}" ><span th:text="${news.newsTittle}"></span></a></dt>
+						<dd class="col-sm-3"><span th:text="${#temporals.format(news.newsTime,'yyyy-MM-dd')}"></span></dd>
+						<hr>
+					</dl>
+
+				</div>
+			</div>
+
+		</div>
+		<div class="col-md-3 column" style="padding-left: 0px;padding-right: 0px;">
+			<div class="card">
+				<div class="card-header" style="background-color: #971515;">
+				<span>最新活动</span>
+					<ul class="card-actions">
+						<li><a href="/act/getAllAct" style="color: #ffffff">查看更多</a></li>
+					</ul>
+				</div>
+				<div class="card-body">
+					<ul class="list-group" th:each="act : ${activityList}">
+						<li class="list-group-item">
+							<span class="badge" th:text="${#temporals.format(act.acCreateTime,'yyyy-MM-dd')}"></span>
+							<a th:href="@{'/act/getActById?acId='+${act.acId}}"><span th:text="${act.acTitle}"></span></a>
+						</li>
+					</ul>
+
+				</div>
+
+			</div>
+			<blockquote>
+				<div class="card">
+					<div class="card-header" style="background-color: #971515;">
+						<h4 style="color: #ffffff;">当前总获得捐款</h4>
+						<ul class="card-actions">
+							<li>
+								<button type="button"><i class="mdi mdi-more"></i></button>
+							</li>
+						</ul>
+					</div>
+					<div class="card-body">
+						<p th:text="${sumMoney}+元"></p>
+					</div>
+				</div>
+			</blockquote>
+		</div>
+	</div>
+	</div>
+<div th:insert="~{footer :: footer}"></div>
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+
+</body>
+</html>
